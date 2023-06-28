@@ -1,31 +1,38 @@
 pipeline {
     agent any
-    triggers {
-        pollSCM '* * * * *'
-     }
+    
     stages {
-        stage('Build') {
+        stage('Deploy') {
             steps {
-                echo "Building.."
-                sh '''
-                echo "doing build stuff.."
-                '''
+                git 'https://github.com/filipas13/stock_dashboard.git'
             }
         }
-        stage('Test') {
+        
+        stage('Build Image') {
             steps {
-                echo "Testing.."
-                sh '''
-                echo "doing test stuff.."
-                '''
+                dir('stock_dashboard') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
             }
         }
-        stage('Deliver') {
+        
+        stage('Deploy in Cloud') {
             steps {
-                echo 'Deliver....'
-                sh '''
-                echo "doing delivery stuff.."
-                '''
+                withDockerRegistry(credentialsId: 'd091bcbe-a43d-4eea-86e2-0b262fd99d70', url: 'https://hub.docker.com/repositories/filipas13') {
+                    sh 'docker build -t stock_dashboard .'
+                    sh 'docker push stock_dashboard'
+                    // Deploy to the cloud using the appropriate deployment commands
+                }
+            }
+        }
+        
+        stage('Smoke Test') {
+            steps {
+                sh 'docker run --env-file .env -p 3000:3000 stock_dashboard &'
+                // Wait for the application to start
+                        sleep 30
+                sh 'curl -f http://52.59.53.0:3000/ || exit 1'
             }
         }
     }
