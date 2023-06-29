@@ -12,17 +12,33 @@ pipeline {
         
         stage('Build Image') {
             steps {
-                dir('stock_dashboard') {
-                    sh 'npm install'
-                    sh 'npm run build'
-                }
+                // add docker build + run image
+            }
             }
         }
-        
+        stage('Deply code to image') {
+            steps {
+                // copy code from local workspace to image
+            }
+            }
+        stage('Test app') {
+            steps {
+                // move smoke test here
+            }
+
+        stage('Update dockerfile ') {
+            steps {
+                // Update dockerfile to contain app (save image over actual one)
+            
+         stage('deploy in cloud ') {
+            steps {
+                // like below
+                
+    
         stage('Deploy in Cloud') {
             steps {
                 withDockerRegistry(credentialsId: 'd091bcbe-a43d-4eea-86e2-0b262fd99d70', url: 'https://hub.docker.com/repositories/filipas13') {
-                    sh 'docker build -t stock_dashboard .'
+                    sh 'docker build -t stock_dashboard .'  // 
                     sh 'docker push stock_dashboard'
                     // Deploy to the cloud using the appropriate deployment commands
                 }
