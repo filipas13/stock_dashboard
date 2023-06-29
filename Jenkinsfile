@@ -1,10 +1,12 @@
 pipeline {
     agent any
-    
+    triggers {
+        pollSCM '* * * * *'
+    }
     stages {
         stage('Deploy') {
             steps {
-                git 'https://github.com/filipas13/stock_dashboard.git'
+                git branch: 'main', url: 'https://github.com/filipas13/stock_dashboard/'
             }
         }
         
