@@ -1,34 +1,19 @@
 pipeline {
-    agent {label "docker-node"} 
-    
-    environment {
-        DOCKERHUB_CREDENTIALS = credentials('docker-hub_filipas13')
-    }
-    
-    stages { 
-        stage('SCM Checkout') {
-            steps{
-                sh 'git clone https://github.com/filipas13/stock_dashboard.git'
-            }
-        }
-
-        stage('Build docker image') {
-            steps {  
-                script {
-                    docker.build("filipas13/stock_dash:${BUILD_NUMBER}", ".")
-                }
-            }
-        }
-        stage('login to dockerhub') {
-            steps{
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-            }
-        }
-        stage('push image') {
+    agent any
+  
+    stages {
+        stage('Deploy') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub_filipas13', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR')]) {
-                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                }
+                git branch: 'main', url: 'https://github.com/filipas13/stock_dashboard/'
+            }
+        }
+        
+        stage('Build Image') {
+            steps {
+                //withDockerRegistry(credentialsId: 'd091bcbe-a43d-4eea-86e2-0b262fd99d70', url: 'https://hub.docker.com/repositories/filipas13') {
+                sh 'docker build -t stock_dashboard .' 
+                    sh 'docker run --env-file .env -p 3000:3000 stock_dashboard'
+                // add docker build + run image
             }
         }
     }
