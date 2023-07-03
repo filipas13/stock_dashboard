@@ -14,6 +14,7 @@ pipeline {
                 // sh 'docker build -t stock_dashboard .' 
                 sh 'docker run -p 3000:3000 stock_dashboard'
                 // add docker build + run image
+                }
             }
         }
     }    
