@@ -1,11 +1,7 @@
 pipeline {
     agent any
     
-    environment {
-        REACT_APP_API_KEY = "ci855o9r01qnrgm31qa0ci855o9r01qnrgm31qag"
-    }
-
-    
+   
     stages {
         stage('clone repo') {
             steps {
@@ -15,13 +11,15 @@ pipeline {
         
         stage('Build Image') {
             steps {
-                sh 'echo env.REACT_APP_API_KEY'
-                script {
+                    script {
+                    
                     // Build the Docker image
                     docker.build('stock_dashboard')
-                
-                    // Run the Docker image
-                    docker.image('stock_dashboard').run('-p 3004:3004 -e REACT_APP_API_KEY=${env.REACT_APP_API_KEY}')
+
+                    withCredentials([string(credentialsId: 'REACT_APP_API_KEY', variable: 'stock')]) {
+                        // Run the Docker image
+                        docker.image('stock_dashboard').run('-p 3004:3004 -e REACT_APP_API_KEY='+stock)
+                    }
                 }
             }
         }
