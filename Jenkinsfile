@@ -15,7 +15,7 @@ pipeline {
                     docker.build('stock_dashboard')
 
                     // Run the Docker image
-                    docker.image('stock_dashboard').run('-p 3003:3003 --env-file .env')
+                    docker.image('stock_dashboard').run(''-p 3004:3003', "--env-file .env"')
                 }
             }
         }
