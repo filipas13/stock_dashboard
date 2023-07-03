@@ -10,7 +10,7 @@ pipeline {
         
         stage('Build Image') {
             steps {
-                // withDockerRegistry(credentialsId: 'd091bcbe-a43d-4eea-86e2-0b262fd99d70', url: 'https://hub.docker.com/repositories/filipas13') {
+                withDockerRegistry(credentialsId: 'd091bcbe-a43d-4eea-86e2-0b262fd99d70', url: 'https://hub.docker.com/repositories/filipas13') {
                 // sh 'docker build -t stock_dashboard .' 
                 sh 'docker run -p 3000:3000 stock_dashboard'
                 // add docker build + run image
