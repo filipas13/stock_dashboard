@@ -1,6 +1,11 @@
 pipeline {
     agent any
-  
+    
+    environment {
+        REACT_APP_API_KEY = "ci855o9r01qnrgm31qa0ci855o9r01qnrgm31qag"
+    }
+
+    
     stages {
         stage('Deploy') {
             steps {
@@ -15,7 +20,7 @@ pipeline {
                     docker.build('stock_dashboard')
 
                     // Run the Docker image
-                    docker.image('stock_dashboard').run('-p 3000:3000')
+                    docker.image('stock_dashboard').run('-p 3004:3004 -e REACT_APP_API_KEY=${env.REACT_APP_API_KEY}')
                 }
             }
         }
