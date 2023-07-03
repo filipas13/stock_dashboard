@@ -15,7 +15,7 @@ pipeline {
         
         stage('Build Image') {
             steps {
-                sh 'env.REACT_APP_API_KEY'
+                sh 'echo env.REACT_APP_API_KEY'
                 script {
                     // Build the Docker image
                     docker.build('stock_dashboard')
