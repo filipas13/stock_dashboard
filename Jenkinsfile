@@ -51,10 +51,21 @@ pipeline {
         }
         stage('Stop and Remove Container') {
             steps {
-                sh 'docker ps -f name=stock_dashboard -q | xargs --no-run-if-empty docker container stop'
-                sh 'docker container ls -a -fname=stock_dashboard -q | xargs -r docker container rm'
+                script {
+                    def containerIds = sh(
+                        script: 'docker ps -q --filter "name=stock_dashboard"',
+                        returnStdout: true
+                    ).trim()
+
+                    if (containerIds) {
+                        for (def containerId in containerIds.split()) {
+                            sh "docker stop $containerId"
+                            sh "docker rm $containerId"
+                        }
+                    }
+                }
             }
-        }     
+        }
     }    
 }
 
