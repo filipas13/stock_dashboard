@@ -51,18 +51,8 @@ pipeline {
         }
         stage('Stop and Remove Container') {
             steps {
-                // Get the running container ID
-                CONTAINER_ID = sh(script: "docker ps -qf 'ancestor=stock_dashboard'", returnStdout: true).trim()
-
-                // Check if the container ID is not empty
-                if (CONTAINER_ID) {
-                    // Stop the Docker container
-                    sh "docker stop ${CONTAINER_ID}"
-                    // Remove the Docker container
-                    sh "docker rm ${CONTAINER_ID}"
-                } else {
-                    echo "No running container found."
-                }
+                sh 'docker ps -f name=zookeeper -q | xargs --no-run-if-empty docker container stop'
+                sh 'docker container ls -a -fname=zookeeper -q | xargs -r docker container rm'
             }
         }     
     }    
