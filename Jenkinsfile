@@ -51,8 +51,8 @@ pipeline {
         }
         stage('Stop and Remove Container') {
             steps {
-                sh 'docker ps -f name=zookeeper -q | xargs --no-run-if-empty docker container stop'
-                sh 'docker container ls -a -fname=zookeeper -q | xargs -r docker container rm'
+                sh 'docker ps -f name=stock_dashboard -q | xargs --no-run-if-empty docker container stop'
+                sh 'docker container ls -a -fname=stock_dashboard -q | xargs -r docker container rm'
             }
         }     
     }    
