@@ -52,11 +52,11 @@ pipeline {
         stage('Stop and Remove Container') {
             steps {
                 script {
-                    docker ps -a \
-                    | awk '{ print \$1,\$2 }' \
-                    | grep stock_dashboard \
-                    | awk '{print \$1 }' \
-                    | xargs -I {} docker rm -f {}
+                    docker ps -a 
+                    | awk '{ print \$1,\$2 }' 
+                    | grep stock_dashboard 
+                    | awk '{print \$1 }' 
+                    | xargs -I {} docker stop -f {}
                 }
             }
         }
