@@ -19,7 +19,8 @@ pipeline {
                     withCredentials([string(credentialsId: 'REACT_APP_API_KEY', variable: 'stock')]) {
                         // Run the Docker image
                         docker.image('stock_dashboard').run('-p 3000:3000 -e REACT_APP_API_KEY='+stock)
-                    }
+                        }
+                    sleep 30
                 }
             }
         }
