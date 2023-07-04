@@ -37,6 +37,9 @@ pipeline {
                 script {
                     // Log in to Docker Hub
                     // sh 'docker login -u <your-username> -p <your-password>'
+                    withCredentials([usernamePassword(credentialsId: 'DOCKERHUB_CREDENTIALS', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                    }
 
                     // Tag the Docker image
                     sh 'docker tag stock_dashboard filipas13/stock_dashboard:latest'
