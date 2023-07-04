@@ -52,17 +52,11 @@ pipeline {
         stage('Stop and Remove Container') {
             steps {
                 script {
-                    def containerIds = sh(
-                        script: 'docker ps -q --filter "name=stock_dashboard"',
-                        returnStdout: true
-                    ).trim()
-
-                    if (containerIds) {
-                        for (def containerId in containerIds.split()) {
-                            sh "docker stop $containerId"
-                            sh "docker rm $containerId"
-                        }
-                    }
+                    docker ps -a \
+                    | awk '{ print \$1,\$2 }' \
+                    | grep stock_dashboard \
+                    | awk '{print \$1 }' \
+                    | xargs -I {} docker rm -f {}
                 }
             }
         }
