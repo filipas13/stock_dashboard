@@ -49,7 +49,18 @@ pipeline {
                 }
             }
         }
-               
+        stage('Stop and Remove Container') {
+            steps {
+                // Get the container ID
+                CONTAINER_ID = sh(script: "docker ps -aqf 'ancestor=stock_dashboard'", returnStdout: true).trim()
+
+                // Stop the Docker container
+                sh "docker stop ${CONTAINER_ID}"
+
+                // Remove the Docker container
+                sh "docker rm ${CONTAINER_ID}"
+            }
+        }      
     }    
 }
 
