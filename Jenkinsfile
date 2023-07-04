@@ -32,8 +32,21 @@ pipeline {
                 sh 'curl -f http://3.68.96.244:3000 || exit 1'
             }
         }
+        stage('Deploy to Docker Hub') {
+            steps {
+                script {
+                    // Log in to Docker Hub
+                    // sh 'docker login -u <your-username> -p <your-password>'
 
-        
+                    // Tag the Docker image
+                    sh 'docker tag stock_dashboard filipas13/stock_dashboard:latest'
+
+                    // Push the Docker image to Docker Hub
+                    sh 'docker push filipas13/stock_dashboard:latest'
+                }
+            }
+        }
+               
     }    
 }
 
