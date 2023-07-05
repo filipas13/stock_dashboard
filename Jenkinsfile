@@ -41,20 +41,20 @@ pipeline {
                         def awsRegion = 'eu-central-1'
                         def ecrRepository = 'jenkins_stock'
                         def dockerImageTag = 'stock_dashboard:latest'
-                        def ecrRegistry = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com"
-                        def ecrImageUri = "${ecrRegistry}/${ecrRepository}:${dockerImageTag}"
+                        def ecrRegistry = '${env.AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com'
+                        def ecrImageUri = '${ecrRegistry}/${ecrRepository}:${dockerImageTag}'
                 
                         // Authenticate with AWS ECR
-                        sh "aws ecr get-login-password --region ${awsRegion} | docker login --filipas13 AWS --password-stdin ${ecrRegistry}"
+                        sh 'aws ecr get-login-password --region ${awsRegion} | docker login --filipas13 AWS --password-stdin ${ecrRegistry}'
                 
                         // Tag the Docker image with the ECR repository URI
-                        sh "docker tag stock_dashboard ${ecrImageUri}"
+                        sh 'docker tag stock_dashboard ${ecrImageUri}'
                 
                         // Push the Docker image to AWS ECR
-                        sh "docker push ${ecrImageUri}"
+                        sh 'docker push ${ecrImageUri}'
                 
                         // Output the ECR image URI for reference
-                        echo "ECR Image URI: ${ecrImageUri}"
+                        echo 'ECR Image URI: ${ecrImageUri}'
                     }
                 }
                 sleep 90
