@@ -45,7 +45,7 @@ pipeline {
                         def ecrImageUri = '${ecrRegistry}/${ecrRepository}:${dockerImageTag}'
                 
                         // Authenticate with AWS ECR
-                        sh 'aws ecr get-login-password --region ${awsRegion} | docker login --filipas13 AWS --password-stdin ${ecrRegistry}'
+                        sh 'aws ecr get-login-password --region ${awsRegion} | docker login --filipas13 --password-stdin ${ecrRegistry}'
                 
                         // Tag the Docker image with the ECR repository URI
                         sh 'docker tag stock_dashboard ${ecrImageUri}'
@@ -54,7 +54,7 @@ pipeline {
                         sh 'docker push ${ecrImageUri}'
                 
                         // Output the ECR image URI for reference
-                        echo 'ECR Image URI: ${ecrImageUri}'
+                        //echo 'ECR Image URI: ${ecrImageUri}'
                     }
                 }
                 sleep 90
