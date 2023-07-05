@@ -45,7 +45,7 @@ pipeline {
                         def ecrImageUri = '${ecrRegistry}/${ecrRepository}:${dockerImageTag}'
                 
                         // Authenticate with AWS ECR
-                        sh 'aws ecr get-login-password --region ${awsRegion} | docker login 646148053375.dkr.ecr.eu-central-1.amazonaws.com/jenkins_stock --password-stdin ${ecrRegistry}'
+                        sh 'aws ecr get-login-password --region eu-central-1 | docker login 646148053375.dkr.ecr.eu-central-1.amazonaws.com/jenkins_stock --password-stdin ${ecrRegistry}'
                 
                         // Tag the Docker image with the ECR repository URI
                         sh 'docker tag stock_dashboard ${ecrImageUri}'
