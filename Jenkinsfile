@@ -1,7 +1,6 @@
 pipeline {
     agent any
-    
-   
+       
     stages {
         stage('clone repo') {
             steps {
@@ -47,6 +46,7 @@ pipeline {
                     // Push the Docker image to Docker Hub
                     sh 'docker push filipas13/stock_dashboard:latest'
                 }
+                sleep 90
             }
         }
         stage('Stop and Remove Container') {
