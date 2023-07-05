@@ -51,7 +51,8 @@ pipeline {
                         sh 'docker tag stock_dashboard ${ecrImageUri}'
                 
                         // Push the Docker image to AWS ECR
-                        sh 'docker push ${ecrImageUri}'
+                        //sh 'docker push ${ecrImageUri}'
+                        sh 'docker push 646148053375.dkr.ecr.eu-central-1.amazonaws.com/jenkins_stock:latest'
                 
                         // Output the ECR image URI for reference
                         //echo 'ECR Image URI: ${ecrImageUri}'
