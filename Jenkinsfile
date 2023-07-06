@@ -33,32 +33,13 @@ pipeline {
         }
         stage('Deploy to AWS ECR') {
             steps {
-                withCredentials([
-                    string(credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'),
-                    string(credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY')
-                ]) {
-                    script {
-                        def awsRegion = 'eu-central-1'
-                        def ecrRepository = 'jenkins_stock'
-                        def dockerImageTag = 'stock_dashboard:latest'
-                        def ecrRegistry = '${env.AWS_ACCOUNT_ID}.dkr.ecr.${awsRegion}.amazonaws.com'
-                        def ecrImageUri = '${ecrRegistry}/${ecrRepository}:${dockerImageTag}'
-                
-                        // Authenticate with AWS ECR
-                        sh 'aws ecr get-login-password --region eu-central-1 | docker login 646148053375.dkr.ecr.eu-central-1.amazonaws.com/jenkins_stock --password-stdin ${ecrRegistry}'
-                
-                        // Tag the Docker image with the ECR repository URI
-                        sh 'docker tag stock_dashboard ${ecrImageUri}'
-                
-                        // Push the Docker image to AWS ECR
-                        //sh 'docker push ${ecrImageUri}'
-                        sh 'docker push 646148053375.dkr.ecr.eu-central-1.amazonaws.com/jenkins_stock:latest'
-                
-                        // Output the ECR image URI for reference
-                        //echo 'ECR Image URI: ${ecrImageUri}'
+                script {
+                    sh 'aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 646148053375.dkr.ecr.eu-central-1.amazonaws.com'
+                    sh 'docker tag frontend:latest 646148053375.dkr.ecr.eu-central-1.amazonaws.com/frontend:latest'
+                    sh 'docker push 646148053375.dkr.ecr.eu-central-1.amazonaws.com/frontend:latest'
                     }
-                }
                 sleep 90
+                }  
             }               
         }
         
