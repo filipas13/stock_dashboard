@@ -29,8 +29,8 @@ pipeline {
                 // Wait for the application to start
                 // sleep 30
                 sh 'curl -f http://3.68.96.244:3000 || exit 1'
+                }
             }
-        }
         stage('Deploy to AWS ECR') {
             steps {
                 script {
@@ -41,8 +41,7 @@ pipeline {
                 sleep 90
                 }  
             }               
-        }
-        
+               
         stage('Stop and Remove Container') {
             steps {
                 script {
@@ -53,7 +52,7 @@ pipeline {
                 }
             }
         }
-    }    
+    }
 }
 
 
