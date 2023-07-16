@@ -11,16 +11,30 @@ pipeline {
         stage('Build Image') {
             steps {
                     script {
-                    
-                    // Build the Docker image
-                    docker.build('stock_dashboard')
+                        // Build the Docker image
+                        sh 'docker build -t stock_dashboard .'
 
-                    withCredentials([string(credentialsId: 'REACT_APP_API_KEY', variable: 'stock')]) {
-                        // Run the Docker image
-                        docker.image('stock_dashboard').run('-p 3000:3000 -e REACT_APP_API_KEY='+stock)
-                        }
+                        // Extract the API key from the environment variable
+                        def stock = sh(returnStdout: true, script: 'echo $REACT_APP_API_KEY').trim()
+
+                        // Run the Docker image with the API key as an environment variable
+                        sh "docker run -d -p 3000:3000 -e REACT_APP_API_KEY=${stock} stock_dashboard"
+
                     sleep 30
-                }
+                }        
+
+                
+                    // script {
+                    
+                    //// Build the Docker image
+                    //docker.build('stock_dashboard')
+
+                    //withCredentials([string(credentialsId: 'REACT_APP_API_KEY', variable: 'stock')]) {
+                    //    // Run the Docker image
+                    //    docker.image('stock_dashboard').run('-p 3000:3000 -e REACT_APP_API_KEY='+stock)
+                    //    }
+                    //sleep 30
+                //}
             }
         }
         stage('Smoke Test') {
