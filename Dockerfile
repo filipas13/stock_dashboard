@@ -9,13 +9,13 @@ RUN apt-get update && apt-get install -y \
     npm
 
 # Set the working directory in the container
-WORKDIR /
+WORKDIR /app/stock_dashboard
 
 # Clone the repository
 RUN git clone https://github.com/filipas13/stock_dashboard.git
 
 # Navigate into the cloned repository
-WORKDIR /stock
+WORKDIR /stock_dashboard
 
 # Install dependencies
 RUN npm install
