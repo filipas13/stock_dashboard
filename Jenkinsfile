@@ -49,7 +49,7 @@ pipeline {
                 def targetPort = 3000
             
                 // Check if the application is listening on the target port using nc (netcat)
-                def ncCmd = "nc -z -w5 ${targetIP} ${targetPort}"
+                def ncCmd = "nc -z -w5 ${targetIP}:${targetPort}"
                 try {
                     sh ncCmd
                     echo "Smoke Test: Application is running and listening on port ${targetPort}."
