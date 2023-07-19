@@ -40,12 +40,38 @@ pipeline {
         }
         stage('Smoke Test') {
             steps {
-                //docker.image('stock_dashboard').run('-p 3000:3000 -e REACT_APP_API_KEY='+stock) &
-                // Wait for the application to start
+                script {
+                // Wait for the application to start (adjust the sleep time as needed)
                 sleep 30
-                sh 'curl -f http://3.120.235.189:3000 || exit 1'
+            
+                // Define the target IP address and port
+                def targetIP = "3.120.235.189"
+                def targetPort = 3000
+            
+                // Check if the application is listening on the target port using nc (netcat)
+                def ncCmd = "nc -z -w5 ${targetIP} ${targetPort}"
+                try {
+                    sh ncCmd
+                    echo "Smoke Test: Application is running and listening on port ${targetPort}."
+                }     catch (Exception e) {
+                        error "Smoke Test failed: Application is not running or not accessible on port ${targetPort}."
                 }
             }
+        }
+    }    
+
+
+
+
+        
+        //stage('Smoke Test') {
+        //    steps {
+        //        //docker.image('stock_dashboard').run('-p 3000:3000 -e REACT_APP_API_KEY='+stock) &
+        //        // Wait for the application to start
+        //        sleep 30
+        //        sh 'curl -f http://3.120.235.189:3000 || exit 1'
+        //        }
+        //    }
         //stage('Deploy to AWS ECR') {
         //    steps {
         //        script {
