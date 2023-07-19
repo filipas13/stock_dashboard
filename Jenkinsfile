@@ -15,11 +15,11 @@ pipeline {
                         sh 'sudo docker build -t stock_dashboard .'
 
                         // Extract the API key from the environment variable
-                        //def stock = sh(returnStdout: true, script: 'echo $REACT_APP_API_KEY').trim()
+                        def stock = sh(returnStdout: true, script: 'echo $REACT_APP_API_KEY').trim()
 
                         // Run the Docker image with the API key as an environment variable
-                        //sh "docker run -d -p 3000:3000 -e REACT_APP_API_KEY=${stock} stock_dashboard"
-                        sh 'sudo docker run -d -p 3000:3000 stock_dashboard'
+                        sh "docker run -d -p 3000:3000 -e REACT_APP_API_KEY=${stock} stock_dashboard"
+                        //sh 'sudo docker run -d -p 3000:3000 stock_dashboard'
 
                     sleep 30
                 }        
