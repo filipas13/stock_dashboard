@@ -18,7 +18,8 @@ RUN git clone https://github.com/filipas13/stock_dashboard.git
 WORKDIR /stock_dashboard
 
 # Install dependencies
-RUN npm install
+RUN npm init -y
+RUN npm install -y
 
 # Expose port 3000 for the web app
 EXPOSE 3000
