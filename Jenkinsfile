@@ -42,7 +42,7 @@ pipeline {
             steps {
                 //docker.image('stock_dashboard').run('-p 3000:3000 -e REACT_APP_API_KEY='+stock) &
                 // Wait for the application to start
-                // sleep 30
+                sleep 30
                 sh 'curl -f http://3.120.235.189:3000 || exit 1'
                 }
             }
