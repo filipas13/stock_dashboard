@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Load the REACT_APP_API_KEY from Jenkins credentials
         API_KEY = credentials('REACT_APP_API_KEY')
-       
+    }   
     stages {
         stage('clone repo') {
             steps {
