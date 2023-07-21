@@ -80,7 +80,7 @@ pipeline {
         stage('Smoke Test') {
             steps {
                 // Wait for the application to start
-                sleep 30
+                sleep 10
                 sh 'curl -f http://3.120.235.189:3000 || exit 1'
                 }
             }
@@ -88,10 +88,10 @@ pipeline {
         stage('Deploy to AWS ECR') {
             steps {
                 script {
-                    sh 'aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 646148053375.dkr.ecr.eu-central-1.amazonaws.com'
-                    sh 'docker build -t stocks .'
-                    sh 'docker tag stocks:latest 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:latest'
-                    sh 'docker push 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:latest'
+                    sh 'aws ecr get-login-password --region eu-central-1 | sudo docker login --username AWS --password-stdin 646148053375.dkr.ecr.eu-central-1.amazonaws.com'
+                    sh 'sudo docker build -t stocks .'
+                    sh 'sudo docker tag stocks:latest 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:latest'
+                    sh 'sudo docker push 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:latest'
                     }
           //      sleep 90
                 }  
