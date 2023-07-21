@@ -1,5 +1,9 @@
 pipeline {
     agent any
+
+    environment {
+        // Load the REACT_APP_API_KEY from Jenkins credentials
+        API_KEY = credentials('REACT_APP_API_KEY')
        
     stages {
         stage('clone repo') {
@@ -25,9 +29,10 @@ pipeline {
          stage('Run Container') {
             steps {
                     script {
-                        def stock = sh(returnStdout: true, script: 'echo $REACT_APP_API_KEY').trim()
+                        //def stock = sh(returnStdout: true, script: 'echo $REACT_APP_API_KEY').trim()
                         // Run the Docker image with the API key as an environment variable
-                        sh "sudo docker run -t -d -p 3000:3000 -e REACT_APP_API_KEY=${stock} stock_dashboard"
+                        //sh "sudo docker run -t -d -p 3000:3000 -e REACT_APP_API_KEY=${stock} stock_dashboard"
+                        sh "docker run -d -p 3000:3000 --name stock_dashboard_container -e REACT_APP_API_KEY=${API_KEY} stock_dashboard"
                         //sh "sudo docker tag #image_id stock_dashboard:latest"
                         //sh 'sudo docker run -d -p 3000:3000 stock_dashboard'
                     sleep 30
@@ -92,16 +97,23 @@ pipeline {
         //        }  
         //    }               
                
-        stage('Stop and Remove Container') {
-            steps {
-                script {
-                    def doc_containers = sh(returnStdout: true, script: 'docker container ps -aq').replaceAll("\n", " ") 
-                    if (doc_containers) {
-                        sh "docker stop ${doc_containers}"
-                    }
-                }
+        //stage('Stop and Remove Container') {
+        //    steps {
+         //       script {
+        //            def doc_containers = sh(returnStdout: true, script: 'docker container ps -aq').replaceAll("\n", " ") 
+         //           if (doc_containers) {
+        //                sh "docker stop ${doc_containers}"
+        //            }
+        //        }
+        //    }
+      //  }
+        post {
+            always {
+            // Clean up - stop and remove the Docker container
+            sh 'docker stop stock_dashboard_container || true'
+            sh 'docker rm stock_dashboard_container || true'
             }
-        }
+        }        
     }
 }
 
