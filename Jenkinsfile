@@ -1,4 +1,4 @@
-    pipeline {
+pipeline {
     agent any
        
     stages {
@@ -15,7 +15,7 @@
                         sh 'sudo docker build -t stock_dashboard .'
         
                         // Extract the API key from the environment variable
-                        def stock = sh(returnStdout: true, script: 'echo $REACT_APP_API_KEY').trim()
+                      
             
                         //sh "sudo docker image prune -a"
                         }
@@ -25,8 +25,7 @@
          stage('Run Container') {
             steps {
                     script {
-
-                        
+                        def stock = sh(returnStdout: true, script: 'echo $REACT_APP_API_KEY').trim()
                         // Run the Docker image with the API key as an environment variable
                         sh "sudo docker run -d -p 3000:3000 -e REACT_APP_API_KEY=${stock} stock_dashboard"
                         //sh "sudo docker tag #image_id stock_dashboard:latest"
