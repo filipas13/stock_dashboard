@@ -107,6 +107,7 @@ pipeline {
         //        }
         //    }
       //  }
+    }
         post {
             always {
             // Clean up - stop and remove the Docker container
@@ -114,7 +115,6 @@ pipeline {
             sh 'docker rm stock_dashboard_container || true'
             }
         }        
-    }
 }
 
 
