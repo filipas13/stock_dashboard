@@ -85,17 +85,17 @@ pipeline {
                 }
             }
         
-        //stage('Deploy to AWS ECR') {
-        //    steps {
-        //        script {
-        //            sh 'aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 646148053375.dkr.ecr.eu-central-1.amazonaws.com'
-       //             sh 'docker build -t frontend .'
-        //            sh 'docker tag frontend:latest 646148053375.dkr.ecr.eu-central-1.amazonaws.com/frontend:latest'
-       //             sh 'docker push 646148053375.dkr.ecr.eu-central-1.amazonaws.com/frontend:latest'
-        //            }
-        //        sleep 90
-        //        }  
-        //    }               
+        stage('Deploy to AWS ECR') {
+            steps {
+                script {
+                    sh 'aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 646148053375.dkr.ecr.eu-central-1.amazonaws.com'
+                    sh 'docker build -t stocks .'
+                    sh 'docker tag stocks:latest 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:latest'
+                    sh 'docker push 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:latest'
+                    }
+          //      sleep 90
+                }  
+            }               
                
         //stage('Stop and Remove Container') {
         //    steps {
