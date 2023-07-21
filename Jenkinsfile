@@ -13,7 +13,7 @@ pipeline {
                     script {
                         // Build the Docker image
                         sh 'sudo docker build -t stock_dashboard .'
-
+        
                         // Extract the API key from the environment variable
                         def stock = sh(returnStdout: true, script: 'echo $REACT_APP_API_KEY').trim()
 
