@@ -95,8 +95,8 @@ pipeline {
                     def timestamp = new Date().format('yyyyMMdd-HHmm')
                     sh 'aws ecr get-login-password --region eu-central-1 | sudo docker login --username AWS --password-stdin 646148053375.dkr.ecr.eu-central-1.amazonaws.com'
                     sh 'sudo docker build -t stocks .'
-                    sh 'sudo docker tag stocks:latest 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:${timestamp}'
-                    sh 'sudo docker push 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:${timestamp}'
+                    sh "sudo docker tag stocks:latest 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:${timestamp}"
+                    sh "sudo docker push 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:${timestamp}"
                     }
                 //      sleep 90
                 }  
