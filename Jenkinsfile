@@ -90,7 +90,7 @@ pipeline {
                // script {
                 // Log in to ECR
                 withCredentials([string(credentialsId: 'ECR_CREDENTIALS', variable: 'ECR_CREDENTIALS')]) {
-                    sh "sudo docker login -u AWS -p ${ECR_CREDENTIALS} 646148053375.dkr.ecr.eu-central-1.amazonaws.com"
+                    sh "sudo docker login -u AWS -p $ECR_CREDENTIALS 646148053375.dkr.ecr.eu-central-1.amazonaws.com"
                 }
                         //sh 'aws ecr get-login-password --region eu-central-1 | sudo docker login --username AWS --password-stdin 646148053375.dkr.ecr.eu-central-1.amazonaws.com'
                 sh 'sudo docker build -t stocks .'
