@@ -112,13 +112,13 @@ pipeline {
         //    }
       //  }
     }
-        post {
-            always {
+    //    post {
+     //       always {
             // Clean up - stop and remove the Docker container
-            sh 'docker stop stock_dashboard_container || true'
-            sh 'docker rm stock_dashboard_container || true'
-            }
-        }        
+     //       sh 'docker stop stock_dashboard_container || true'
+    //        sh 'docker rm stock_dashboard_container || true'
+    //        }
+   //     }        
 }
 
 
