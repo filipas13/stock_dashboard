@@ -35,7 +35,7 @@ pipeline {
                         sh "sudo docker run -d -p 3000:3000 --name stock_dashboard_container -e REACT_APP_API_KEY=$API_KEY stock_dashboard"
                         //sh "sudo docker tag #image_id stock_dashboard:latest"
                         //sh 'sudo docker run -d -p 3000:3000 stock_dashboard'
-                    sleep 30
+                    sleep 10
                     }        
                                
                     // script {
@@ -90,7 +90,7 @@ pipeline {
                // script {
                 // Log in to ECR
                 withCredentials([string(credentialsId: 'ECR_CREDENTIALS', variable: 'ECR_CREDENTIALS')]) {
-                    sh "docker login -u AWS -p ${ECR_CREDENTIALS} 646148053375.dkr.ecr.eu-central-1.amazonaws.com"
+                    sh "sudo docker login -u AWS -p ${ECR_CREDENTIALS} 646148053375.dkr.ecr.eu-central-1.amazonaws.com"
                 }
                         //sh 'aws ecr get-login-password --region eu-central-1 | sudo docker login --username AWS --password-stdin 646148053375.dkr.ecr.eu-central-1.amazonaws.com'
                 sh 'sudo docker build -t stocks .'
