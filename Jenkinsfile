@@ -5,64 +5,82 @@ pipeline {
         // Load the REACT_APP_API_KEY from Jenkins credentials
         API_KEY = credentials('REACT_APP_API_KEY')
     }   
-    stages {
-        stage('Clone repo') {
-            steps {
-                git branch: 'main', url: 'https://github.com/filipas13/stock_dashboard/'
-            }
-        }
+    // stages {
+    //     stage('Clone repo') {
+    //         steps {
+    //             git branch: 'main', url: 'https://github.com/filipas13/stock_dashboard/'
+    //         }
+    //     }
         
-        stage('Build Docker Image') {
-            steps {
-                    script {
-                        // Build the Docker image
-                        sh 'sudo docker build -t stock_dashboard .'
+    //     stage('Build Docker Image') {
+    //         steps {
+    //                 script {
+    //                     // Build the Docker image
+    //                     sh 'sudo docker build -t stock_dashboard .'
         
-                        // Extract the API key from the environment variable
+    //                     // Extract the API key from the environment variable
                       
             
-                        //sh "sudo docker image prune -a"
-                        }
+    //                     //sh "sudo docker image prune -a"
+    //                     }
+    //                 }
+    //             }
+        stages {
+            stage('Clone Repo') {
+                steps {
+                    git branch: 'main', url: 'https://github.com/filipas13/stock_dashboard/'
+                }
+            }
+
+            stage('Build Docker Image') {
+                steps {
+                    script {
+                        def imageName = 'stock_dashboard'
+                        def imageTag = 'ci-' + env.BUILD_NUMBER // Customize the image tag as needed
+                        sh "docker build -t ${imageName}:${imageTag} ."
                     }
                 }
+            }
+       
 
-        stage('Run Unit Tests') {
-            steps {
-                script {
-                    def containerName = 'stock_dashboard_ci'
-                    def imageName = 'stock_dashboard'
-                    def imageTag = 'ci-' + env.BUILD_NUMBER
-                    sh "sudo docker run --name $containerName $imageName:$imageTag npm test"
-                    sh "sudo docker rm ${containerName}" // Clean up the container
+            stage('Run Unit Tests') {
+                steps {
+                    script {
+                        def containerName = 'stock_dashboard_ci'
+                        def imageName = 'stock_dashboard'
+                        def imageTag = 'ci-' + env.BUILD_NUMBER
+                        sh "sudo docker run --name $containerName $imageName:$imageTag npm test"
+                        sh "sudo docker rm ${containerName}" // Clean up the container
+                    }
                 }
             }
         }
                         
-         stage('Run Container') {
-            steps {
-                    script {
-                        //def stock = sh(returnStdout: true, script: 'echo $REACT_APP_API_KEY').trim()
-                        // Run the Docker image with the API key as an environment variable
-                        //sh "sudo docker run -t -d -p 3000:3000 -e REACT_APP_API_KEY=${stock} stock_dashboard"
-                        sh "sudo docker run -d -p 3000:3000 --name stock_dashboard_container -e REACT_APP_API_KEY=$API_KEY stock_dashboard"
-                        //sh "sudo docker tag #image_id stock_dashboard:latest"
-                        //sh 'sudo docker run -d -p 3000:3000 stock_dashboard'
-                    sleep 10
-                    }        
+        //  stage('Run Container') {
+        //     steps {
+        //             script {
+        //                 //def stock = sh(returnStdout: true, script: 'echo $REACT_APP_API_KEY').trim()
+        //                 // Run the Docker image with the API key as an environment variable
+        //                 //sh "sudo docker run -t -d -p 3000:3000 -e REACT_APP_API_KEY=${stock} stock_dashboard"
+        //                 sh "sudo docker run -d -p 3000:3000 --name stock_dashboard_container -e REACT_APP_API_KEY=$API_KEY stock_dashboard"
+        //                 //sh "sudo docker tag #image_id stock_dashboard:latest"
+        //                 //sh 'sudo docker run -d -p 3000:3000 stock_dashboard'
+        //             sleep 10
+        //             }        
                                
-                    // script {
+        //             // script {
                     
-                    //// Build the Docker image
-                    //docker.build('stock_dashboard')
+        //             //// Build the Docker image
+        //             //docker.build('stock_dashboard')
 
-                    //withCredentials([string(credentialsId: 'REACT_APP_API_KEY', variable: 'stock')]) {
-                    //    // Run the Docker image
-                    //    docker.image('stock_dashboard').run('-p 3000:3000 -e REACT_APP_API_KEY='+stock)
-                    //    }
-                    //sleep 30
-                //}
-            }
-        }
+        //             //withCredentials([string(credentialsId: 'REACT_APP_API_KEY', variable: 'stock')]) {
+        //             //    // Run the Docker image
+        //             //    docker.image('stock_dashboard').run('-p 3000:3000 -e REACT_APP_API_KEY='+stock)
+        //             //    }
+        //             //sleep 30
+        //         //}
+        //     }
+        // }
         //stage('Smoke Test v2') {
         //    steps {
         //       script {
@@ -89,30 +107,30 @@ pipeline {
 
 
         
-        stage('Smoke Test') {
-            steps {
-                // Wait for the application to start
-                sleep 10
-                sh 'curl -f http://3.120.235.189:3000 || exit 1'
-                }
-            }
+        // stage('Smoke Test') {
+        //     steps {
+        //         // Wait for the application to start
+        //         sleep 10
+        //         sh 'curl -f http://3.120.235.189:3000 || exit 1'
+        //         }
+        //     }
         
-        stage('Deploy to AWS ECR') {
-            steps {
-                script {
-                // Log in to ECR
-                //withCredentials([string(credentialsId: 'ECR_CREDENTIALS', variable: 'ECR_CREDENTIALS')]) {
-                //    sh "sudo docker login -u AWS -p $ECR_CREDENTIALS 646148053375.dkr.ecr.eu-central-1.amazonaws.com"
-                //}
-                    def timestamp = new Date().format('yyyyMMdd-HHmm')
-                    sh 'aws ecr get-login-password --region eu-central-1 | sudo docker login --username AWS --password-stdin 646148053375.dkr.ecr.eu-central-1.amazonaws.com'
-                    sh 'sudo docker build -t stocks .'
-                    sh "sudo docker tag stocks:latest 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:${timestamp}"
-                    sh "sudo docker push 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:${timestamp}"
-                    }
-                //      sleep 90
-                }  
-            }               
+        // stage('Deploy to AWS ECR') {
+        //     steps {
+        //         script {
+        //         // Log in to ECR
+        //         //withCredentials([string(credentialsId: 'ECR_CREDENTIALS', variable: 'ECR_CREDENTIALS')]) {
+        //         //    sh "sudo docker login -u AWS -p $ECR_CREDENTIALS 646148053375.dkr.ecr.eu-central-1.amazonaws.com"
+        //         //}
+        //             def timestamp = new Date().format('yyyyMMdd-HHmm')
+        //             sh 'aws ecr get-login-password --region eu-central-1 | sudo docker login --username AWS --password-stdin 646148053375.dkr.ecr.eu-central-1.amazonaws.com'
+        //             sh 'sudo docker build -t stocks .'
+        //             sh "sudo docker tag stocks:latest 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:${timestamp}"
+        //             sh "sudo docker push 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:${timestamp}"
+        //             }
+        //         //      sleep 90
+        //         }  
+        //     }               
                
         //stage('Stop and Remove Container') {
         //    steps {
@@ -124,7 +142,7 @@ pipeline {
         //        }
         //    }
       //  }
-    }
+                    //}
         post {
            always {
             // Clean up - stop and remove the Docker container
