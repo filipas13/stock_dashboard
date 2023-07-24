@@ -37,7 +37,7 @@ pipeline {
                     script {
                         def imageName = 'stock_dashboard'
                         def imageTag = 'ci-' + env.BUILD_NUMBER // Customize the image tag as needed
-                        sh "docker build -t ${imageName}:${imageTag} ."
+                        sh "sudo docker build -t ${imageName}:${imageTag} ."
                     }
                 }
             }
