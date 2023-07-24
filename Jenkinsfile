@@ -6,13 +6,13 @@ pipeline {
         API_KEY = credentials('REACT_APP_API_KEY')
     }   
     stages {
-        stage('clone repo') {
+        stage('Clone repo') {
             steps {
                 git branch: 'main', url: 'https://github.com/filipas13/stock_dashboard/'
             }
         }
         
-        stage('Build Image') {
+        stage('Build Docker Image') {
             steps {
                     script {
                         // Build the Docker image
@@ -25,6 +25,18 @@ pipeline {
                         }
                     }
                 }
+
+        stage('Run Unit Tests') {
+            steps {
+                script {
+                    def containerName = 'stock_dashboard_ci'
+                    def imageName = 'stock_dashboard'
+                    def imageTag = 'ci-' + env.BUILD_NUMBER
+                    sh "docker run --name $containerName $imageName:$imageTag npm test"
+                    sh "docker rm ${containerName}" // Clean up the container
+                }
+            }
+        }
                         
          stage('Run Container') {
             steps {
