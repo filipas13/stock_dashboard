@@ -32,8 +32,8 @@ pipeline {
                     def containerName = 'stock_dashboard_ci'
                     def imageName = 'stock_dashboard'
                     def imageTag = 'ci-' + env.BUILD_NUMBER
-                    sh "docker run --name $containerName $imageName:$imageTag npm test"
-                    sh "docker rm ${containerName}" // Clean up the container
+                    sh "sudo docker run --name $containerName $imageName:$imageTag npm test"
+                    sh "sudo docker rm ${containerName}" // Clean up the container
                 }
             }
         }
