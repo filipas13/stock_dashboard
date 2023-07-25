@@ -6,13 +6,13 @@ pipeline {
         API_KEY = credentials('REACT_APP_API_KEY')
     }   
     stages {
-        stage('clone repo') {
+        stage('Clone repo') {
             steps {
                 git branch: 'main', url: 'https://github.com/filipas13/stock_dashboard/'
             }
         }
         
-        stage('Build Image') {
+        stage('Build Docker Image') {
             steps {
                     script {
                         // Build the Docker image
@@ -98,28 +98,28 @@ pipeline {
                     sh "sudo docker tag stocks:latest 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:${timestamp}"
                     sh "sudo docker push 646148053375.dkr.ecr.eu-central-1.amazonaws.com/stocks:${timestamp}"
                     }
-                //      sleep 90
+                    sleep 90
                 }  
             }               
                
-        //stage('Stop and Remove Container') {
-        //    steps {
-         //       script {
-        //            def doc_containers = sh(returnStdout: true, script: 'docker container ps -aq').replaceAll("\n", " ") 
-         //           if (doc_containers) {
-        //                sh "docker stop ${doc_containers}"
-        //            }
-        //        }
-        //    }
-      //  }
-    }
+        stage('Stop and Remove Container') {
+           steps {
+               script {
+                   def doc_containers = sh(returnStdout: true, script: 'docker container ps -aq').replaceAll("\n", " ") 
+                   if (doc_containers) {
+                       sh "docker stop ${doc_containers}"
+                   }
+               }
+           }
+       }
+    
         post {
            always {
             // Clean up - stop and remove the Docker container
            sh 'docker stop stock_dashboard_container || true'
             sh 'docker rm stock_dashboard_container || true'
             }
-       }        
+        }        
+    }
 }
-
 
