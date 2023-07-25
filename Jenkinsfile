@@ -112,6 +112,7 @@ pipeline {
                }
            }
        }
+    }
     
         post {
            always {
@@ -120,6 +121,6 @@ pipeline {
             sh 'docker rm stock_dashboard_container || true'
             }
         }        
-    }
+    
 }
 
