@@ -105,7 +105,7 @@ pipeline {
         stage('Stop and Remove Container') {
            steps {
                script {
-                   def doc_containers = sh(returnStdout: true, script: 'docker container ps -aq').replaceAll("\n", " ") 
+                   def doc_containers = sh(returnStdout: true, script: 'sudo docker container ps -aq').replaceAll("\n", " ") 
                    if (doc_containers) {
                        sh "sudo docker stop ${doc_containers}"
                    }
@@ -117,8 +117,8 @@ pipeline {
         post {
            always {
             // Clean up - stop and remove the Docker container
-           sh 'sudo docker stop stock_dashboard || true'
-            sh 'sudo docker rm stock_dashboard || true'
+           sh 'sudo docker stop stock_dashboard_container || true'
+            sh 'sudo docker rm stock_dashboard_container || true'
             }
         }        
     
