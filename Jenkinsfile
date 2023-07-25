@@ -102,16 +102,16 @@ pipeline {
                 }  
             }               
                
-        stage('Stop and Remove Container') {
-           steps {
-               script {
-                   def doc_containers = sh(returnStdout: true, script: 'sudo docker container ps -aq').replaceAll("\n", " ") 
-                   if (doc_containers) {
-                       sh "sudo docker stop ${doc_containers}"
-                   }
-               }
-           }
-       }
+       //  stage('Stop and Remove Container') {
+       //     steps {
+       //         script {
+       //             def doc_containers = sh(returnStdout: true, script: 'sudo docker container ps -aq').replaceAll("\n", " ") 
+       //             if (doc_containers) {
+       //                 sh "sudo docker stop ${doc_containers}"
+       //             }
+       //         }
+       //     }
+       // }
     }
     
         post {
