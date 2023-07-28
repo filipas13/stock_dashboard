@@ -69,7 +69,7 @@ pipeline {
         always {
             // Clean up - stop and remove the Docker container
             sh 'sudo docker stop stock_dashboard_container || true'
-            sh 'sudo docker rm stock_dashboard_container || true'
+            //sh 'sudo docker rm stock_dashboard_container || true'
         }
     }            
 }
