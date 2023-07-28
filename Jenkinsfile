@@ -26,7 +26,7 @@ pipeline {
                 script {
                     // Run the Docker image with the API key as an environment variable
                     sh "sudo docker run -d -p 3000:3000 --name stock_dashboard_container -e REACT_APP_API_KEY=$API_KEY stock_dashboard"
-                    sleep 15
+                    //sleep 15
                 }                       
             }
         }
@@ -35,7 +35,7 @@ pipeline {
         stage('Smoke Test') {
             steps {
                 // Wait for the application to start
-                sleep 10
+                //sleep 10
                 sh 'curl -f http://3.120.235.189:3000 || exit 1'
             }
         }
@@ -49,7 +49,7 @@ pipeline {
                     sh "sudo docker tag stocks:latest 646148053375.dkr.ecr.eu-central-1.amazonaws.com/demo:${timestamp}"
                     sh "sudo docker push 646148053375.dkr.ecr.eu-central-1.amazonaws.com/demo:${timestamp}"
                 }
-                sleep 90
+                //sleep 90
             }  
         }               
                
