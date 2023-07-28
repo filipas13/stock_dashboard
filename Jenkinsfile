@@ -35,7 +35,7 @@ pipeline {
         stage('Smoke Test') {
             steps {
                 // Wait for the application to start
-                //sleep 10
+                sleep 10
                 sh 'curl -f http://3.120.235.189:3000 || exit 1'
             }
         }
