@@ -49,7 +49,7 @@ pipeline {
                     sh "sudo docker tag stocks:latest 646148053375.dkr.ecr.eu-central-1.amazonaws.com/demo:${timestamp}"
                     sh "sudo docker push 646148053375.dkr.ecr.eu-central-1.amazonaws.com/demo:${timestamp}"
                 }
-                sleep 1020
+                sleep 720
             }  
         }               
                
